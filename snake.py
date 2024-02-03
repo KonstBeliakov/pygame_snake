@@ -33,9 +33,11 @@ class Snake():
                 del self.position[0]
 
             if temp_map[head[0]][head[1]] == 2:
-                print('AppleEaten')
                 self.length += 1
                 event = 'AppleEaten'
+            elif temp_map[head[0]][head[1]] == 4:
+                self.speed *= 2
+                event = 'SpeedAppleEaten'
 
             if head in self.position or temp_map[head[0]][head[1]] == 3:
                 return 'GameOver'
