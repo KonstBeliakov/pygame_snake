@@ -1,4 +1,5 @@
 import pygame
+import copy
 from time import perf_counter
 from random import choice
 
@@ -12,7 +13,11 @@ SELL_SIZE = 20
 
 n = 20
 
-cells = [[0 for _ in range(n)] for _ in range(n)]
+map = [[0 for _ in range(n)] for _ in range(n)]
+
+for i in range(6, 15):
+    for j in range(6, 15):
+        map[i][j] = 3
 
 snake = [(0, 0)]
 snake_length = 1
@@ -73,31 +78,32 @@ while not gameOver:
         if head[0] < 0 or head[1] < 0 or head[0] > n - 1 or head[1] > n - 1:
             gameOver = True
 
-        if head in snake:
+        if head in snake or map[head[0]][head[1]]:
             gameOver = True
         else:
             snake.append(head)
 
-    for i in range(len(cells)):
-        for j in range(len(cells[i])):
-            cells[i][j] = 0
+    temp_map = copy.deepcopy(map)
+
     for i in snake:
-        cells[i[0]][i[1]] = 1
+        temp_map[i[0]][i[1]] = 1
     if apple_position:
-        cells[apple_position[0]][apple_position[1]] = 2
+        temp_map[apple_position[0]][apple_position[1]] = 2
 
     if not apple_position:
-        apple_position = choice([(i, j) for i in range(n) for j in range(n) if not cells[i][j]])
+        apple_position = choice([(i, j) for i in range(n) for j in range(n) if not temp_map[i][j]])
 
-    for i in range(len(cells)):
-        for j in range(len(cells[i])):
-            match cells[i][j]:
+    for i in range(len(temp_map)):
+        for j in range(len(temp_map[i])):
+            match temp_map[i][j]:
                 case 0:
                     color = (255, 255, 255)
                 case 1:
                     color = (0, 255, 0)
                 case 2:
                     color = (255, 0, 0)
+                case 3:
+                     color = (50, 50, 50)
 
             pygame.draw.rect(screen, color, pygame.Rect(10 + i * (SELL_SIZE + 2), 10 + j * (SELL_SIZE + 2),
                                                         SELL_SIZE, SELL_SIZE))
