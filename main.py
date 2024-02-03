@@ -5,6 +5,15 @@ from random import choice
 
 import progress_bar
 
+def loadMap(level):
+    global map
+    map = []
+    with open(f'level{level}.txt', encoding='utf-8') as file:
+        for line in file.readlines():
+            map.append([int(i) for i in  line.split()])
+
+loadMap(1)
+
 pygame.init()
 screen = pygame.display.set_mode((800, 600))
 done = False
@@ -12,12 +21,6 @@ done = False
 SELL_SIZE = 20
 
 n = 20
-
-map = [[0 for _ in range(n)] for _ in range(n)]
-
-for i in range(6, 15):
-    for j in range(6, 15):
-        map[i][j] = 3
 
 snake = [(0, 0)]
 snake_length = 1
@@ -113,6 +116,7 @@ while not gameOver:
                 level_progress_bar.set_volume(1)
                 snake = [(0, 0)]
                 snake_length = 1
+                loadMap(2)
             else:
                 level_progress_bar.set_volume(snake_length)
 
