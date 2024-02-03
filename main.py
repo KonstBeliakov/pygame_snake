@@ -68,15 +68,13 @@ while not gameOver:
     if apple_position:
         temp_map[apple_position[0]][apple_position[1]] = 2
 
-    if perf_counter() - t > 0.1:
-        t += 0.1
-        snake_event = snake.update(direction, temp_map, n)
+    snake_event = snake.update(direction, temp_map, n)
 
-        match snake_event:
-            case 'GameOver':
-                gameOver = True
-            case 'AppleEaten':
-                apple_position = None
+    match snake_event:
+        case 'GameOver':
+            gameOver = True
+        case 'AppleEaten':
+            apple_position = None
 
     if not apple_position:
         apple_position = choice([(i, j) for i in range(n) for j in range(n) if not temp_map[i][j]])
