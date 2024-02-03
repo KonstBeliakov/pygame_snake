@@ -27,7 +27,7 @@ gameOver = False
 
 cyclic_map = False
 
-level_progress_bar = progress_bar.ProgressBar(0, 5)
+level_progress_bar = progress_bar.ProgressBar(3, 5)
 level_progress_bar.set_position(n * (SELL_SIZE + 2) + 50, 10)
 
 while not gameOver:
