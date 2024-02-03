@@ -32,15 +32,15 @@ class Snake():
             if self.length <= len(self.position):
                 del self.position[0]
 
-            if temp_map[head[0]][head[1]] == 2:
-                self.length += 1
-                event = 'AppleEaten'
-            elif temp_map[head[0]][head[1]] == 4:
-                self.speed *= 2
-                event = 'SpeedAppleEaten'
+            match(temp_map[head[0]][head[1]]):
+                case 2:
+                    self.length += 1
+                    event = 'AppleEaten'
+                case 4:
+                    self.speed *= 2
+                    event = 'SpeedAppleEaten'
+                case 3|1:
+                    return 'GameOver'
 
-            if head in self.position or temp_map[head[0]][head[1]] == 3:
-                return 'GameOver'
-            else:
-                self.position.append(head)
+            self.position.append(head)
         return event
