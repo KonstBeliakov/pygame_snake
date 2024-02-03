@@ -2,6 +2,8 @@ import pygame
 from time import perf_counter
 from random import choice
 
+import progress_bar
+
 pygame.init()
 screen = pygame.display.set_mode((800, 600))
 done = False
@@ -25,6 +27,8 @@ gameOver = False
 
 cyclic_map = False
 
+level_progress_bar = progress_bar.ProgressBar(0, 5)
+level_progress_bar.set_position(n * (SELL_SIZE + 2) + 50, 10)
 
 while not gameOver:
     for event in pygame.event.get():
@@ -92,4 +96,6 @@ while not gameOver:
 
             pygame.draw.rect(screen, color, pygame.Rect(10 + i * (SELL_SIZE + 2), 10 + j * (SELL_SIZE + 2),
                                                         SELL_SIZE, SELL_SIZE))
+
+            level_progress_bar.draw(screen)
     pygame.display.flip()
