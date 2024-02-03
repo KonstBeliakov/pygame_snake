@@ -33,7 +33,7 @@ level_progress_bar.set_position(n * (SELL_SIZE + 2) + 50, 10)
 while not gameOver:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
-            done = True
+            gameOver = True
 
     screen.fill((0, 0, 0))  #
     keys = pygame.key.get_pressed()
