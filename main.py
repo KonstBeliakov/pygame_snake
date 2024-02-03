@@ -4,6 +4,7 @@ from time import perf_counter
 from random import choice
 
 import progress_bar
+import snake
 
 def loadMap(level):
     global map
@@ -22,8 +23,7 @@ SELL_SIZE = 20
 
 n = 20
 
-snake = [(0, 0)]
-snake_length = 1
+snake = snake.Snake()
 
 direction = 'RIGHT'
 
@@ -61,37 +61,22 @@ while not gameOver:
     if keys[pygame.K_DOWN]:
         direction = 'DOWN'
 
-    if perf_counter() - t > 0.2:
-        t += 0.2
-        match direction:
-            case 'LEFT':
-                head = (snake[-1][0] - 1, snake[-1][1])
-            case 'RIGHT':
-                head = (snake[-1][0] + 1, snake[-1][1])
-            case 'UP':
-                head = (snake[-1][0], snake[-1][1] - 1)
-            case 'DOWN':
-                head = (snake[-1][0], snake[-1][1] + 1)
-
-        if snake_length <= len(snake):
-            del snake[0]
-        if head == apple_position:
-            snake_length += 1
-            apple_position = None
-        if head[0] < 0 or head[1] < 0 or head[0] > n - 1 or head[1] > n - 1:
-            gameOver = True
-
-        if head in snake or map[head[0]][head[1]]:
-            gameOver = True
-        else:
-            snake.append(head)
-
     temp_map = copy.deepcopy(map)
 
-    for i in snake:
+    for i in snake.position:
         temp_map[i[0]][i[1]] = 1
     if apple_position:
         temp_map[apple_position[0]][apple_position[1]] = 2
+
+    if perf_counter() - t > 0.1:
+        t += 0.1
+        snake_event = snake.update(direction, temp_map, n)
+
+        match snake_event:
+            case 'GameOver':
+                gameOver = True
+            case 'AppleEaten':
+                apple_position = None
 
     if not apple_position:
         apple_position = choice([(i, j) for i in range(n) for j in range(n) if not temp_map[i][j]])
@@ -111,14 +96,14 @@ while not gameOver:
             pygame.draw.rect(screen, color, pygame.Rect(10 + i * (SELL_SIZE + 2), 10 + j * (SELL_SIZE + 2),
                                                         SELL_SIZE, SELL_SIZE))
 
-            if snake_length == level_progress_bar.max_volume:
+            if snake.length == level_progress_bar.max_volume:
                 level_bar.add_volume(1)
                 level_progress_bar.set_volume(1)
-                snake = [(0, 0)]
-                snake_length = 1
+                snake.position = [(0, 0)]
+                snake.length = 1
                 loadMap(2)
             else:
-                level_progress_bar.set_volume(snake_length)
+                level_progress_bar.set_volume(snake.length)
 
             level_progress_bar.draw(screen)
             level_bar.draw(screen)
