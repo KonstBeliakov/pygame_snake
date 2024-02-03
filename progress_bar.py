@@ -21,8 +21,11 @@ class ProgressBar():
     def set_volume(self, volume):
         self.volume = volume
 
-    def set_size(self, size):
-        self.size = size
+    def add_volume(self, x):
+        self.volume += x
+
+    def set_size(self, sizeX, sizeY):
+        self.size = (sizeX, sizeY)
 
     def draw(self, screen):
         pygame.draw.rect(screen, self.border_color,
