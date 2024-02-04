@@ -18,12 +18,12 @@ class Button():
 
     def update(self, event):
         if event == 'pressed':
-            print('mouse pressed')
             if in_rect(pygame.mouse.get_pos(), self.position, self.size):
                 self.pressed = True
         if event == 'released':
-            print('mouse released')
+            t = self.pressed
             self.pressed = False
+            return t
 
 
 
