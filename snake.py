@@ -64,12 +64,12 @@ class Snake():
             match(temp_map[head[0]][head[1]]):
                 case 2:
                     self.length += 1
-                    event = 'AppleEaten'
+                    event = ('AppleEaten', head)
                 case 4:
-                    event = 'SpeedAppleEaten'
+                    event = ('AppleEaten', head)
                     self.add_effect('speed')
                 case 5:
-                    event = 'SlownessAppleEaten'
+                    event = ('AppleEaten', head)
                     self.add_effect('slowness')
                 case 3|1:
                     return 'GameOver'

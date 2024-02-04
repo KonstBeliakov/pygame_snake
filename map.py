@@ -18,13 +18,12 @@ class Map():
             for line in file.readlines():
                 self.map.append([int(i) for i in line.split()])
 
-    def draw(self, screen, snake, items, apple_position):
+    def draw(self, screen, snake, items):
         self.updating_map = copy.deepcopy(self.map)
 
         for i in snake.position:
             self.updating_map[i[0]][i[1]] = 1
-        if apple_position:
-            self.updating_map[apple_position[0]][apple_position[1]] = 2
+
         for i in items:
             self.updating_map[i.position[0]][i.position[1]] = i.type
 

@@ -26,8 +26,7 @@ direction = 'RIGHT'
 
 t = perf_counter()
 
-items = []
-apple_position = None
+items = [item.Item((5, 5), 2)]
 
 gameOver = False
 
@@ -59,15 +58,18 @@ while not gameOver:
     if keys[pygame.K_DOWN]:
         direction = 'DOWN'
 
-    snake_map.draw(screen, snake, items, apple_position)
+    snake_map.draw(screen, snake, items)
 
     snake_event = snake.update(direction, snake_map.updating_map, n)
 
     match snake_event:
         case 'GameOver':
             gameOver = True
-        case 'AppleEaten':
-            apple_position = None
+        case 'AppleEaten', position:
+            for i in range(len(items)):
+                if items[i].position == position:
+                    del items[i]
+                    break
             if snake.length == level_progress_bar.max_volume:
                 level_bar.add_volume(1)
                 level_progress_bar.set_volume(1)
@@ -75,7 +77,6 @@ while not gameOver:
                 snake.length = 1
                 direction = 'RIGHT'
                 snake_map.loadMap(2)
-                apple_position = None
             else:
                 level_progress_bar.set_volume(snake.length)
             if not items:
@@ -86,17 +87,8 @@ while not gameOver:
                         items.append(item.Item(pos, 4, 'speed'))
                     case 1:
                         items.append(item.Item(pos, 5, 'slowness'))
-        case 'SpeedAppleEaten':
-            for i in range(len(items)):
-                if items[i].effect == 'speed':
-                    del items[i]
-        case 'SlownessAppleEaten':
-            for i in range(len(items)):
-                if items[i].effect == 'slowness':
-                    del items[i]
-
-    if not apple_position:
-        apple_position = random.choice([(i, j) for i in range(n) for j in range(n) if not snake_map.updating_map[i][j]])
+                    case _:
+                        items.append(item.Item(pos, 2))
 
     level_progress_bar.draw(screen)
     level_bar.draw(screen)
