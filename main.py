@@ -14,7 +14,6 @@ snake_map.loadMap(1)
 
 pygame.init()
 screen = pygame.display.set_mode((800, 600))
-done = False
 
 SELL_SIZE = 20
 
