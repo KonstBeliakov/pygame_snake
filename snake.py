@@ -1,5 +1,6 @@
 import pygame
 from time import perf_counter
+import progress_bar
 
 class Snake():
     def __init__(self):
@@ -7,14 +8,29 @@ class Snake():
         self.length = 1
         self.speed = 8
         self.time = perf_counter()
+        self.effects = []
+        self.effect_time_bars = []
 
     def draw(self, screen):
-        pass
+        for i in range(len(self.effect_time_bars)):
+            self.effect_time_bars[i].set_position(25 * 20, 200 + 50 * i)
+            self.effect_time_bars[i].set_size(200, 30)
+            self.effect_time_bars[i].draw(screen)
 
     def update(self, direction, temp_map, map_size):
         event = None
         if perf_counter() - self.time > 1 / self.speed:
             self.time += 1 / self.speed
+
+            for i in range(len(self.effects)):
+                self.effects[i][1] -= 1 / self.speed
+                if self.effects[i][1] < 0:
+                    if self.effects[i][0] == 'speed':
+                        self.speed /= 2
+                    del self.effects[i]
+                    del self.effect_time_bars[i]
+                else:
+                    self.effect_time_bars[i].set_volume(int(self.effects[i][1] // 0.5))
 
             match direction:
                 case 'LEFT':
@@ -39,6 +55,9 @@ class Snake():
                 case 4:
                     self.speed *= 2
                     event = 'SpeedAppleEaten'
+                    self.effects.append(['speed', 10])
+                    self.effect_time_bars.append(progress_bar.ProgressBar(20, 20))
+                    self.effect_time_bars[-1].set_color((0, 255, 255))
                 case 3|1:
                     return 'GameOver'
 

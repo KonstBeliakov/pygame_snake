@@ -86,7 +86,7 @@ while not gameOver:
                 loadMap(2)
             else:
                 level_progress_bar.set_volume(snake.length)
-            if not random.randrange(5):
+            if not random.randrange(2):
                 speed_apple_position = random.choice([(i, j) for i in range(n) for j in range(n) if not temp_map[i][j]])
         case 'SpeedAppleEaten':
             speed_apple_position = None
@@ -114,4 +114,6 @@ while not gameOver:
 
             level_progress_bar.draw(screen)
             level_bar.draw(screen)
+
+            snake.draw(screen)
     pygame.display.flip()
