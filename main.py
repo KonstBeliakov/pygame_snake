@@ -36,7 +36,7 @@ text_color = (100, 150, 100)
 
 text1 = font.render('Progress on level:', True, text_color)
 
-level_progress_bar = progress_bar.ProgressBar(1, 3)
+level_progress_bar = progress_bar.ProgressBar(1, 6)
 level_progress_bar.set_position(n * (SELL_SIZE + 2) + 50, 50)
 level_progress_bar.set_size(200, 30)
 
@@ -99,17 +99,11 @@ while not gameOver:
                 if not items:
                     t = random.randrange(5)
                     pos = random.choice([(i, j) for i in range(n) for j in range(n) if not snake_map.updating_map[i][j]])
-                    match t:
-                        case 0:
-                            items.append(item.Item(pos, 4, 'speed'))
-                        case 1:
-                            items.append(item.Item(pos, 5, 'slowness'))
-                        case 2:
-                            items.append(item.Item(pos, 6, 'disorientation'))
-                        case 3:
-                            items.append(item.Item(pos, 7, 'darkness'))
-                        case _:
-                            items.append(item.Item(pos, 2))
+
+                    effects = {2: None, 4: 'speed', 5: 'slowness', 6: 'disorientation', 7: 'darkness'}
+
+                effect = random.choices([2, 4, 5, 6, 7], weights=[snake_map.drop_probability.get(i, 0) for i in [2, 4, 5, 6, 7]])[0] #
+                items.append(item.Item(pos, effect, effects[effect]))
 
         level_progress_bar.draw(screen)
         level_bar.draw(screen)

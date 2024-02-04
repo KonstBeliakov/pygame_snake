@@ -15,6 +15,7 @@ class Map():
         self.updating_map = []
         self.block_colors = [(255, 255, 255), (0, 255, 0), (255, 0, 0), (50, 50, 50), (0, 255, 255), (0, 150, 0),
                              (150, 150, 0), (100, 0, 100)]
+        self.drop_probability = {}
 
     def loadMap(self, level, snake):
         self.map = []
@@ -28,6 +29,11 @@ class Map():
                 line = file.readline()
                 snake.position.append((int(line.split()[0]), int(line.split()[1])))
             snake.direction = file.readline().strip()
+
+            n = int(file.readline())
+            for i in range(n):
+                line = file.readline()
+                self.drop_probability[int(line.split()[0])] = int(line.split()[1])
 
             for line in file.readlines():
                 self.map.append([int(i) for i in line.split()])
