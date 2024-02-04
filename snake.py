@@ -78,8 +78,9 @@ class Snake():
                 case 'DOWN':
                     head = (self.position[-1][0], self.position[-1][1] + 1)
 
-            if head[0] < 0 or head[1] < 0 or head[0] > map_size - 1 or head[1] > map_size - 1:
-                return 'GameOver'
+            head = (head[0] % map_size, head[1] % map_size)
+            #if head[0] < 0 or head[1] < 0 or head[0] > map_size - 1 or head[1] > map_size - 1:
+            #    return 'GameOver'
 
             if self.length <= len(self.position):
                 del self.position[0]

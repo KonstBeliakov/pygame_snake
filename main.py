@@ -67,7 +67,7 @@ while not gameOver:
             else:
                 level_progress_bar.set_volume(snake.length)
             if not items:
-                t = random.randrange(2)
+                t = random.randrange(5)
                 pos = random.choice([(i, j) for i in range(n) for j in range(n) if not snake_map.updating_map[i][j]])
                 match t:
                     case 0:
@@ -76,7 +76,7 @@ while not gameOver:
                         items.append(item.Item(pos, 5, 'slowness'))
                     case 2:
                         items.append(item.Item(pos, 6, 'disorientation'))
-                    case 1:
+                    case 3:
                         items.append(item.Item(pos, 7, 'darkness'))
                     case _:
                         items.append(item.Item(pos, 2))
