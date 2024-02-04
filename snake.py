@@ -22,11 +22,13 @@ class Snake():
         if perf_counter() - self.time > 1 / self.speed:
             self.time += 1 / self.speed
 
-            for i in range(len(self.effects)):
+            for i in range(len(self.effects) - 1, -1, -1):
                 self.effects[i][1] -= 1 / self.speed
                 if self.effects[i][1] < 0:
                     if self.effects[i][0] == 'speed':
                         self.speed /= 2
+                    elif self.effects[i][0] == 'slowness':
+                        self.speed *= 2
                     del self.effects[i]
                     del self.effect_time_bars[i]
                 else:
@@ -58,6 +60,12 @@ class Snake():
                     self.effects.append(['speed', 10])
                     self.effect_time_bars.append(progress_bar.ProgressBar(20, 20))
                     self.effect_time_bars[-1].set_color((0, 255, 255))
+                case 5:
+                    self.speed /= 2
+                    event = 'SlownessAppleEaten'
+                    self.effects.append(['slowness', 10])
+                    self.effect_time_bars.append(progress_bar.ProgressBar(20, 20))
+                    self.effect_time_bars[-1].set_color((0, 100, 0))
                 case 3|1:
                     return 'GameOver'
 

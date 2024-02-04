@@ -4,6 +4,7 @@ from time import perf_counter
 import random
 
 import progress_bar
+import item
 import snake
 
 def loadMap(level):
@@ -29,8 +30,9 @@ direction = 'RIGHT'
 
 t = perf_counter()
 
+items = []
 apple_position = None
-speed_apple_position = None
+#speed_apple_position = None
 
 gameOver = False
 
@@ -68,8 +70,8 @@ while not gameOver:
         temp_map[i[0]][i[1]] = 1
     if apple_position:
         temp_map[apple_position[0]][apple_position[1]] = 2
-    if speed_apple_position:
-        temp_map[speed_apple_position[0]][speed_apple_position[1]] = 4
+    for i in items:
+        temp_map[i.position[0]][i.position[1]] = i.type
 
     snake_event = snake.update(direction, temp_map, n)
 
@@ -86,10 +88,22 @@ while not gameOver:
                 loadMap(2)
             else:
                 level_progress_bar.set_volume(snake.length)
-            if not random.randrange(2) and not speed_apple_position:
-                speed_apple_position = random.choice([(i, j) for i in range(n) for j in range(n) if not temp_map[i][j]])
+            if not items:
+                t = random.randrange(5)
+                pos = random.choice([(i, j) for i in range(n) for j in range(n) if not temp_map[i][j]])
+                match t:
+                    case 0:
+                        items.append(item.Item(pos, 4, 'speed'))
+                    case 1:
+                        items.append(item.Item(pos, 5, 'slowness'))
         case 'SpeedAppleEaten':
-            speed_apple_position = None
+            for i in range(len(items)):
+                if items[i].effect == 'speed':
+                    del items[i]
+        case 'SlownessAppleEaten':
+            for i in range(len(items)):
+                if items[i].effect == 'slowness':
+                    del items[i]
 
     if not apple_position:
         apple_position = random.choice([(i, j) for i in range(n) for j in range(n) if not temp_map[i][j]])
@@ -107,6 +121,8 @@ while not gameOver:
                      color = (50, 50, 50)
                 case 4:
                     color = (0, 255, 255)
+                case 5:
+                    color = (0, 100, 0)
 
             pygame.draw.rect(screen, color, pygame.Rect(10 + i * (SELL_SIZE + 2), 10 + j * (SELL_SIZE + 2),
                                                         SELL_SIZE, SELL_SIZE))
