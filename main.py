@@ -22,8 +22,6 @@ n = 20
 
 snake = snake.Snake()
 
-direction = 'RIGHT'
-
 t = perf_counter()
 
 items = [item.Item((5, 5), 2)]
@@ -46,21 +44,10 @@ while not gameOver:
             gameOver = True
 
     screen.fill((0, 0, 0))  #
-    keys = pygame.key.get_pressed()
-
-
-    if keys[pygame.K_LEFT]:
-        direction = 'LEFT'
-    if keys[pygame.K_RIGHT]:
-        direction = 'RIGHT'
-    if keys[pygame.K_UP]:
-        direction = 'UP'
-    if keys[pygame.K_DOWN]:
-        direction = 'DOWN'
 
     snake_map.draw(screen, snake, items)
 
-    snake_event = snake.update(direction, snake_map.updating_map, n)
+    snake_event = snake.update(snake_map.updating_map, n)
 
     match snake_event:
         case 'GameOver':
@@ -75,7 +62,7 @@ while not gameOver:
                 level_progress_bar.set_volume(1)
                 snake.position = [(1, 1)]
                 snake.length = 1
-                direction = 'RIGHT'
+                snake.direction = 'RIGHT'
                 snake_map.loadMap(2)
             else:
                 level_progress_bar.set_volume(snake.length)
@@ -87,6 +74,8 @@ while not gameOver:
                         items.append(item.Item(pos, 4, 'speed'))
                     case 1:
                         items.append(item.Item(pos, 5, 'slowness'))
+                    case 2:
+                        items.append(item.Item(pos, 6, 'disorientation'))
                     case _:
                         items.append(item.Item(pos, 2))
 

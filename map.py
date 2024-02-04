@@ -10,7 +10,8 @@ class Map():
         self.map_size = 20
         self.map = []
         self.updating_map = []
-        self.block_colors = [(255, 255, 255), (0, 255, 0), (255, 0, 0), (50, 50, 50), (0, 255, 255), (0, 100, 0)]
+        self.block_colors = [(255, 255, 255), (0, 255, 0), (255, 0, 0), (50, 50, 50), (0, 255, 255), (0, 100, 0),
+                             (150, 150, 0)]
 
     def loadMap(self, level):
         self.map = []
