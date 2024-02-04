@@ -4,7 +4,7 @@ import progress_bar
 
 class Snake():
     def __init__(self):
-        self.position = [(0, 0)]
+        self.position = [(1, 1)]
         self.length = 1
         self.speed = 8
         self.time = perf_counter()

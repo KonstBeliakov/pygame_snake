@@ -6,15 +6,11 @@ import random
 import progress_bar
 import item
 import snake
+import map
 
-def loadMap(level):
-    global map
-    map = []
-    with open(f'level{level}.txt', encoding='utf-8') as file:
-        for line in file.readlines():
-            map.append([int(i) for i in  line.split()])
+snake_map = map.Map()
 
-loadMap(1)
+snake_map.loadMap(1)
 
 pygame.init()
 screen = pygame.display.set_mode((800, 600))
@@ -32,13 +28,12 @@ t = perf_counter()
 
 items = []
 apple_position = None
-#speed_apple_position = None
 
 gameOver = False
 
 cyclic_map = False
 
-level_progress_bar = progress_bar.ProgressBar(1, 10)
+level_progress_bar = progress_bar.ProgressBar(1, 6)
 level_progress_bar.set_position(n * (SELL_SIZE + 2) + 50, 10)
 level_progress_bar.set_size(200, 30)
 
@@ -64,16 +59,9 @@ while not gameOver:
     if keys[pygame.K_DOWN]:
         direction = 'DOWN'
 
-    temp_map = copy.deepcopy(map)
+    snake_map.draw(screen, snake, items, apple_position)
 
-    for i in snake.position:
-        temp_map[i[0]][i[1]] = 1
-    if apple_position:
-        temp_map[apple_position[0]][apple_position[1]] = 2
-    for i in items:
-        temp_map[i.position[0]][i.position[1]] = i.type
-
-    snake_event = snake.update(direction, temp_map, n)
+    snake_event = snake.update(direction, snake_map.updating_map, n)
 
     match snake_event:
         case 'GameOver':
@@ -83,14 +71,16 @@ while not gameOver:
             if snake.length == level_progress_bar.max_volume:
                 level_bar.add_volume(1)
                 level_progress_bar.set_volume(1)
-                snake.position = [(0, 0)]
+                snake.position = [(1, 1)]
                 snake.length = 1
-                loadMap(2)
+                direction = 'RIGHT'
+                snake_map.loadMap(2)
+                apple_position = None
             else:
                 level_progress_bar.set_volume(snake.length)
             if not items:
                 t = random.randrange(5)
-                pos = random.choice([(i, j) for i in range(n) for j in range(n) if not temp_map[i][j]])
+                pos = random.choice([(i, j) for i in range(n) for j in range(n) if not snake_map.updating_map[i][j]])
                 match t:
                     case 0:
                         items.append(item.Item(pos, 4, 'speed'))
@@ -106,30 +96,11 @@ while not gameOver:
                     del items[i]
 
     if not apple_position:
-        apple_position = random.choice([(i, j) for i in range(n) for j in range(n) if not temp_map[i][j]])
+        apple_position = random.choice([(i, j) for i in range(n) for j in range(n) if not snake_map.updating_map[i][j]])
 
-    for i in range(len(temp_map)):
-        for j in range(len(temp_map[i])):
-            match temp_map[i][j]:
-                case 0:
-                    color = (255, 255, 255)
-                case 1:
-                    color = (0, 255, 0)
-                case 2:
-                    color = (255, 0, 0)
-                case 3:
-                     color = (50, 50, 50)
-                case 4:
-                    color = (0, 255, 255)
-                case 5:
-                    color = (0, 100, 0)
+    level_progress_bar.draw(screen)
+    level_bar.draw(screen)
 
-            pygame.draw.rect(screen, color, pygame.Rect(10 + i * (SELL_SIZE + 2), 10 + j * (SELL_SIZE + 2),
-                                                        SELL_SIZE, SELL_SIZE))
+    snake.draw(screen)
 
-
-            level_progress_bar.draw(screen)
-            level_bar.draw(screen)
-
-            snake.draw(screen)
     pygame.display.flip()
