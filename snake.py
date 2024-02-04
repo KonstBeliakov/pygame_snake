@@ -10,12 +10,23 @@ class Snake():
         self.time = perf_counter()
         self.effects = []
         self.effect_time_bars = []
+        self.effect_color = {'speed': (0, 255, 255), 'slowness': (0, 100, 0)}
 
     def draw(self, screen):
         for i in range(len(self.effect_time_bars)):
             self.effect_time_bars[i].set_position(25 * 20, 200 + 50 * i)
             self.effect_time_bars[i].set_size(200, 30)
             self.effect_time_bars[i].draw(screen)
+
+    def add_effect(self, effect_type):
+        match effect_type:
+            case 'speed':
+                self.speed *= 2
+            case 'slowness':
+                self.speed /= 2
+        self.effects.append([effect_type, 10])
+        self.effect_time_bars.append(progress_bar.ProgressBar(20, 20))
+        self.effect_time_bars[-1].set_color(self.effect_color[effect_type])
 
     def update(self, direction, temp_map, map_size):
         event = None
@@ -55,17 +66,11 @@ class Snake():
                     self.length += 1
                     event = 'AppleEaten'
                 case 4:
-                    self.speed *= 2
                     event = 'SpeedAppleEaten'
-                    self.effects.append(['speed', 10])
-                    self.effect_time_bars.append(progress_bar.ProgressBar(20, 20))
-                    self.effect_time_bars[-1].set_color((0, 255, 255))
+                    self.add_effect('speed')
                 case 5:
-                    self.speed /= 2
                     event = 'SlownessAppleEaten'
-                    self.effects.append(['slowness', 10])
-                    self.effect_time_bars.append(progress_bar.ProgressBar(20, 20))
-                    self.effect_time_bars[-1].set_color((0, 100, 0))
+                    self.add_effect('slowness')
                 case 3|1:
                     return 'GameOver'
 
