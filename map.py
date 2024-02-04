@@ -16,9 +16,19 @@ class Map():
         self.block_colors = [(255, 255, 255), (0, 255, 0), (255, 0, 0), (50, 50, 50), (0, 255, 255), (0, 150, 0),
                              (150, 150, 0), (100, 0, 100)]
 
-    def loadMap(self, level):
+    def loadMap(self, level, snake):
         self.map = []
         with open(f'level{level}.txt', encoding='utf-8') as file:
+            n = int(file.readline())
+
+            snake.effect_clear()
+
+            snake.position = []
+            for i in range(n):
+                line = file.readline()
+                snake.position.append((int(line.split()[0]), int(line.split()[1])))
+            snake.direction = file.readline().strip()
+
             for line in file.readlines():
                 self.map.append([int(i) for i in line.split()])
 

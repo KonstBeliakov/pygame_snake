@@ -7,6 +7,7 @@ class Snake():
         self.position = [(1, 1)]
         self.length = 1
         self.speed = 5
+        self.normal_speed = 5
         self.time = perf_counter()
         self.effects = []
         self.effect_time_bars = []
@@ -35,6 +36,14 @@ class Snake():
         self.effects.append([effect_type, 10])
         self.effect_time_bars.append(progress_bar.ProgressBar(20, 20))
         self.effect_time_bars[-1].set_color(self.effect_color[effect_type])
+
+    def effect_clear(self):
+        self.speed = self.normal_speed
+        self.disorientation = False
+        self.darkness = 0
+
+        self.effects = []
+        self.effect_time_bars = []
 
     def update(self, temp_map, map_size):
         keys = pygame.key.get_pressed()

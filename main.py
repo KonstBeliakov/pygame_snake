@@ -9,9 +9,11 @@ import snake
 import map
 import button
 
+snake = snake.Snake()
+
 snake_map = map.Map()
 
-snake_map.loadMap(1)
+snake_map.loadMap(1, snake)
 
 pygame.init()
 screen = pygame.display.set_mode((800, 600))
@@ -19,8 +21,6 @@ screen = pygame.display.set_mode((800, 600))
 SELL_SIZE = 20
 
 n = 20
-
-snake = snake.Snake()
 
 t = perf_counter()
 
@@ -36,7 +36,7 @@ text_color = (100, 150, 100)
 
 text1 = font.render('Progress on level:', True, text_color)
 
-level_progress_bar = progress_bar.ProgressBar(1, 10)
+level_progress_bar = progress_bar.ProgressBar(1, 3)
 level_progress_bar.set_position(n * (SELL_SIZE + 2) + 50, 50)
 level_progress_bar.set_size(200, 30)
 
@@ -65,7 +65,8 @@ while not gameOver:
             for i in range(len(level_buttons)):
                 if level_buttons[i].update('released'):
                     pause = False
-                    snake_map.loadMap(i + 1)
+                    snake_map.loadMap(i + 1, snake)
+                    level_bar.set_volume(i + 1)
 
     keys = pygame.key.get_pressed()
 
@@ -92,7 +93,7 @@ while not gameOver:
                     snake.position = [(1, 1)]
                     snake.length = 1
                     snake.direction = 'RIGHT'
-                    snake_map.loadMap(2)
+                    snake_map.loadMap(level_bar.volume, snake)
                 else:
                     level_progress_bar.set_volume(snake.length)
                 if not items:
