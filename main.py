@@ -30,15 +30,21 @@ gameOver = False
 
 cyclic_map = False
 
+font = pygame.font.SysFont(None, 40)
+
+text_color = (100, 150, 100)
+
+text1 = font.render('Progress on level:', True, text_color)
+
 level_progress_bar = progress_bar.ProgressBar(1, 10)
-level_progress_bar.set_position(n * (SELL_SIZE + 2) + 50, 10)
+level_progress_bar.set_position(n * (SELL_SIZE + 2) + 50, 50)
 level_progress_bar.set_size(200, 30)
 
-level_bar = progress_bar.ProgressBar(1, 10)
-level_bar.set_position(n * (SELL_SIZE + 2) + 50, 50)
-level_bar.set_size(200, 30)
+text2 = font.render('Level:', True, text_color)
 
-font = pygame.font.SysFont(None, 48)
+level_bar = progress_bar.ProgressBar(1, 10)
+level_bar.set_position(n * (SELL_SIZE + 2) + 50, 130)
+level_bar.set_size(200, 30)
 
 button_continue = button.Button((10, 10), (200, 30), 'Continue')
 level_buttons = [button.Button((10 + i * 45, 60), (30, 30), str(i + 1)) for i in range(5)]
@@ -108,6 +114,9 @@ while not gameOver:
         level_bar.draw(screen)
 
         snake.draw(screen)
+
+        screen.blit(text1, ((SELL_SIZE + 2) * n + 50, 10))
+        screen.blit(text2, ((SELL_SIZE + 2) * n + 50, 90))
     else:
         button_continue.draw(screen, font)
 
