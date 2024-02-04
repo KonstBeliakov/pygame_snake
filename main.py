@@ -38,8 +38,10 @@ level_bar = progress_bar.ProgressBar(1, 10)
 level_bar.set_position(n * (SELL_SIZE + 2) + 50, 50)
 level_bar.set_size(200, 30)
 
-button_continue = button.Button((10, 10), (200, 30))
-level_buttons = [button.Button((10 + i * 45, 60), (30, 30)) for i in range(5)]
+font = pygame.font.SysFont(None, 48)
+
+button_continue = button.Button((10, 10), (200, 30), 'Continue')
+level_buttons = [button.Button((10 + i * 45, 60), (30, 30), str(i + 1)) for i in range(5)]
 
 pause = False
 
@@ -107,9 +109,9 @@ while not gameOver:
 
         snake.draw(screen)
     else:
-        button_continue.draw(screen)
+        button_continue.draw(screen, font)
 
         for i in range(len(level_buttons)):
-            level_buttons[i].draw(screen)
+            level_buttons[i].draw(screen, font)
 
     pygame.display.flip()
