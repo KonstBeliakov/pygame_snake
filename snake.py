@@ -10,8 +10,10 @@ class Snake():
         self.time = perf_counter()
         self.effects = []
         self.effect_time_bars = []
-        self.effect_color = {'speed': (0, 255, 255), 'slowness': (0, 100, 0), 'disorientation': (150, 150, 0)}
+        self.effect_color = {'speed': (0, 255, 255), 'slowness': (0, 150, 0), 'disorientation': (150, 150, 0),
+                             'darkness': (100, 0, 100)}
         self.disorientation = False
+        self.darkness = 0
         self.direction = 'RIGHT'
 
     def draw(self, screen):
@@ -28,6 +30,8 @@ class Snake():
                 self.speed /= 2
             case 'disorientation':
                 self.disorientation = True
+            case 'darkness':
+                self.darkness += 1
         self.effects.append([effect_type, 10])
         self.effect_time_bars.append(progress_bar.ProgressBar(20, 20))
         self.effect_time_bars[-1].set_color(self.effect_color[effect_type])
@@ -57,6 +61,8 @@ class Snake():
                         self.speed *= 2
                     elif self.effects[i][0] == 'disorientation':
                         self.disorientation = False
+                    elif self.effects[i][0] == 'darkness':
+                        self.darkness -= 1
                     del self.effects[i]
                     del self.effect_time_bars[i]
                 else:
@@ -78,19 +84,19 @@ class Snake():
             if self.length <= len(self.position):
                 del self.position[0]
 
+            if temp_map[head[0]][head[1]] in [2, 4, 5, 6, 7]:
+                self.length += 1
+                event = ('AppleEaten', head)
+
             match(temp_map[head[0]][head[1]]):
-                case 2:
-                    self.length += 1
-                    event = ('AppleEaten', head)
                 case 4:
-                    event = ('AppleEaten', head)
                     self.add_effect('speed')
                 case 5:
-                    event = ('AppleEaten', head)
                     self.add_effect('slowness')
                 case 6:
-                    event = ('AppleEaten', head)
                     self.add_effect('disorientation')
+                case 7:
+                    self.add_effect('darkness')
                 case 3|1:
                     return 'GameOver'
 

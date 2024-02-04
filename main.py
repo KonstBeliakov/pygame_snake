@@ -30,7 +30,7 @@ gameOver = False
 
 cyclic_map = False
 
-level_progress_bar = progress_bar.ProgressBar(1, 6)
+level_progress_bar = progress_bar.ProgressBar(1, 10)
 level_progress_bar.set_position(n * (SELL_SIZE + 2) + 50, 10)
 level_progress_bar.set_size(200, 30)
 
@@ -67,7 +67,7 @@ while not gameOver:
             else:
                 level_progress_bar.set_volume(snake.length)
             if not items:
-                t = random.randrange(5)
+                t = random.randrange(2)
                 pos = random.choice([(i, j) for i in range(n) for j in range(n) if not snake_map.updating_map[i][j]])
                 match t:
                     case 0:
@@ -76,6 +76,8 @@ while not gameOver:
                         items.append(item.Item(pos, 5, 'slowness'))
                     case 2:
                         items.append(item.Item(pos, 6, 'disorientation'))
+                    case 1:
+                        items.append(item.Item(pos, 7, 'darkness'))
                     case _:
                         items.append(item.Item(pos, 2))
 
