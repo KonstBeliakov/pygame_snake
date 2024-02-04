@@ -10,6 +10,7 @@ class Map():
         self.map_size = 20
         self.map = []
         self.updating_map = []
+        self.block_colors = [(255, 255, 255), (0, 255, 0), (255, 0, 0), (50, 50, 50), (0, 255, 255), (0, 100, 0)]
 
     def loadMap(self, level):
         self.map = []
@@ -30,19 +31,5 @@ class Map():
 
         for i in range(self.map_size):
             for j in range(self.map_size):
-                match self.updating_map[i][j]:
-                    case 0:
-                        color = (255, 255, 255)
-                    case 1:
-                        color = (0, 255, 0)
-                    case 2:
-                        color = (255, 0, 0)
-                    case 3:
-                        color = (50, 50, 50)
-                    case 4:
-                        color = (0, 255, 255)
-                    case 5:
-                        color = (0, 100, 0)
-
-                pygame.draw.rect(screen, color, pygame.Rect(10 + i * (self.sell_size + 2),
-                                                            10 + j * (self.sell_size + 2), self.sell_size, self.sell_size))
+                pygame.draw.rect(screen, self.block_colors[self.updating_map[i][j]], pygame.Rect(10 + i * (self.sell_size + 2),
+                                         10 + j * (self.sell_size + 2), self.sell_size, self.sell_size))
