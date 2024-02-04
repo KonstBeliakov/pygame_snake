@@ -86,7 +86,7 @@ while not gameOver:
                 loadMap(2)
             else:
                 level_progress_bar.set_volume(snake.length)
-            if not random.randrange(2):
+            if not random.randrange(2) and not speed_apple_position:
                 speed_apple_position = random.choice([(i, j) for i in range(n) for j in range(n) if not temp_map[i][j]])
         case 'SpeedAppleEaten':
             speed_apple_position = None
